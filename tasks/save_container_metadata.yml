@@ -1,0 +1,11 @@
+---
+# This will save metadata in a dict keyed by container name, so that it's
+# possible to retrieve information about any container, not just the last
+# created one (stored in docker_containers[0]).
+- name: "{{ dc_name }} | save metadata"
+  set_fact:
+    docker_container: >
+      {{
+      docker_container|default({})|
+        hash_merge({docker_containers[0].Name: docker_containers[0]})
+      }}

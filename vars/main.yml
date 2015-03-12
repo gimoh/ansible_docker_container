@@ -1,0 +1,4 @@
+---
+dc_docker_opts: "{{ opts|default({}) }}"
+dc_name: "{{ dc_docker_opts.get('name', 'unnamed') }}"
+dc_proxy_tls: "{{ proxy_tls|default(False) }}"

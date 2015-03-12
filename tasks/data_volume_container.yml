@@ -1,0 +1,11 @@
+## Data volume container
+- name: "{{ dc_name }} | data volume container"
+  docker:
+    image: tianon/true
+    name: "{{
+      '{}-vol'.format(dc_name) if 'name' in dc_docker_opts else omit
+      }}"
+    state: present
+    volumes: "{{ volumes }}"
+
+- include: save_container_metadata.yml

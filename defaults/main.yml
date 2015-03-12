@@ -1,0 +1,4 @@
+---
+## for nginx-proxy
+dc_src_certs_dir: .
+dnp_nginx_certs_dir: /etc/pki/svc-certs

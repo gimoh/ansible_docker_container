@@ -1,0 +1,40 @@
+---
+# Sets up a docker container with an optional:
+# - data volume container
+# - SSL/TLS certificate installed into nginx-proxy
+
+#- debug: var=proxy_virtual_host
+#- debug: var=proxy_tls
+#- debug: var=volumes
+#- debug: var=dnp_nginx_certs_dir
+#- debug: var=dc_src_certs_dir
+#- debug: var=dc_docker_opts
+#- debug: var=dc_name
+
+## Optional features
+
+- include: data_volume_container.yml
+  when: volumes is defined
+
+- include: nginx_proxy_tls.yml
+  when: proxy_virtual_host is defined and proxy_tls
+
+## Main container
+
+- name: "{{ dc_name }} | container state"
+  docker:
+  args: >
+    {{
+    dc_docker_opts |
+      hash_merge(
+        {'volumes_from': docker_containers[0].Name} if volumes is defined
+        else {}
+        ) |
+      hash_merge(
+        {'env': {'VIRTUAL_HOST': proxy_virtual_host} } if proxy_virtual_host
+        is defined else {})
+    }}
+
+- include: save_container_metadata.yml
+
+#- debug: var=docker_container
