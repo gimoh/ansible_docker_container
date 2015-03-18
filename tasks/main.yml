@@ -10,6 +10,7 @@
 #- debug: var=dc_src_certs_dir
 #- debug: var=dc_docker_opts
 #- debug: var=dc_name
+#- debug: var=dc_proxy_tls
 
 ## Optional features
 
@@ -17,7 +18,7 @@
   when: volumes is defined
 
 - include: nginx_proxy_tls.yml
-  when: proxy_virtual_host is defined and proxy_tls
+  when: proxy_virtual_host is defined and dc_proxy_tls
 
 ## Main container
 
