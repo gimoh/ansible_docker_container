@@ -4,6 +4,7 @@
 # - SSL/TLS certificate installed into nginx-proxy
 
 #- debug: var=proxy_virtual_host
+#- debug: var=proxy_config
 #- debug: var=proxy_tls
 #- debug: var=volumes
 #- debug: var=dnp_nginx_certs_dir
@@ -16,6 +17,9 @@
 
 - include: data_volume_container.yml
   when: volumes is defined
+
+- include: nginx_proxy_config.yml
+  when: proxy_virtual_host is defined and proxy_config is defined
 
 - include: nginx_proxy_tls.yml
   when: proxy_virtual_host is defined and dc_proxy_tls|bool

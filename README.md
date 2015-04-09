@@ -53,6 +53,10 @@ opts: {}
 # with a CNAME record.
 proxy_virtual_host: none
 
+# Optional additional nginx configuration snippet to inject into vhost
+# configuration for the service.
+proxy_config: none
+
 # Enable uploading of SSL/TLS certificate for the service for use with the
 # reverse proxy.
 proxy_tls: false
@@ -73,7 +77,13 @@ dc_src_certs_dir: .
 # where SSL/TLS certificates for the exposed services will be uploaded to.
 #
 # Only used if using nginx-proxy feature and proxy_tls is enabled.
-dnp_nginx_certs_dir: .
+dnp_nginx_certs_dir: /etc/pki/svc-certs
+
+# Common with `gimoh.docker_nginx_proxy` role.  Specifies path to
+# directory where nginx vhost config snippets will be stored.
+#
+# Only used if using nginx-proxy feature and proxy_config is defined.
+dnp_nginx_vhost_dir: /etc/nginx-proxy-vhost.d
 ```
 
 _vars/main.yml_
@@ -158,14 +168,18 @@ docker image when it's running.
 
 The container will be created with an `env` variable
 `VIRTUAL_HOST={{ proxy_virtual_host }}` injected into the other passed in
-options in `opts`.
+options in `opts`.  Also an nginx configuration file will be
+automatically created with the contents as passed to the
+``proxy_config`` option.
 
     - hosts: servers
       roles:
         - role: gimoh.docker_container
           opts: { image: gimoh/sleeping-beauty, name: test4 }
           proxy_virtual_host: test4.f.q.d.n
-          proxy_ssl: false
+          proxy_config: >
+            server_tokens off;
+            client_max_body_size 100m;
 
 And finally a more complete example, including passing more complex parameters
 to the `docker` module and using the facts set by this role:

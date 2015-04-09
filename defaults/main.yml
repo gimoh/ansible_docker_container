@@ -2,3 +2,4 @@
 ## for nginx-proxy
 dc_src_certs_dir: .
 dnp_nginx_certs_dir: /etc/pki/svc-certs
+dnp_nginx_vhost_dir: /etc/nginx-proxy-vhost.d
