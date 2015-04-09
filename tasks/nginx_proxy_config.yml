@@ -1,0 +1,6 @@
+---
+- name: "{{ dc_name }} | nginx vhost config snippet"
+  copy:
+    content: "{{ proxy_config }}"
+    dest: "{{ dnp_nginx_vhost_dir }}/{{ proxy_virtual_host }}"
+    mode: 0644
